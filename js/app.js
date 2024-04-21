@@ -5,7 +5,11 @@ function choose(choices) {
 }
 
 function getInt(item) {
-  return parseInt(localStorage.getItem(item))
+  try {
+    return parseInt(localStorage.getItem(item))
+  } catch (e) {
+    return undefined;
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,12 +20,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const p_score = document.getElementById('score');
   const settings = document.getElementById('settings')
   const b_close = document.getElementById('close')
+  const s_extra = document.getElementById('extra')
   const s_lives = document.getElementById('max_lives')
   const s_target = document.getElementById('target')
   const cover = document.getElementById('cover');
   const reload = document.getElementById('reload');
+  let extra = Boolean(getInt('extra') || 0);
+  let alphabet = ('абвгдежзийклмнопрстуфхцчшщыьэюя' + extra ? 'ёъ' : '').split('')
 
-  const alphabet = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'.split('')
+  s_extra.addEventListener('input', e=> {
+    alphabet = ('абвгдежзийклмнопрстуфхцчшщыьэюя' + (!extra ? 'ёъ' : '')).split('')
+    extra = !extra;
+    localStorage.setItem('extra', (extra ? 1 : 0).toString());
+    console.log(alphabet);
+  })
 
   settings.style.display = 'none';
   cover.style.display = 'none';
@@ -136,5 +148,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     input.value = '';
   })
-
 })
